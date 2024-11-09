@@ -1,2 +1,2 @@
 # Air Quality Monitor
-An ECE 198 Project
+An ECE 198 project.

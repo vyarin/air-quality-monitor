@@ -8,13 +8,8 @@
 #include "stm32f4xx_hal.h"
 
 ADC_HandleTypeDef hadc1;
-
 UART_HandleTypeDef huart2;
 
-uint32_t ozone_value = 0;
-
-uint32_t Read_ADC(void);
-float Voltage_to_PPB(float voltage);
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_USART2_UART_Init(void);
@@ -32,50 +27,23 @@ int main(void)
   MX_USART2_UART_Init();
   MX_ADC1_Init();
 
+  uint16_t ozone_value;
+
+
   /* Infinite loop */
   while (1)
   {
-	  ozone_value = Read_ADC(); //get ozone concentration from sensor
+	  ozone_value = read_ADC(); // get ozone concentration from sensor
 
-	  float voltage = (ozone_value/4095.0f)*5.0f; //Converting the ADC value to voltage using micro-controller ADC 12 bit values (0-4095) and 5V supply for sensor
+	  float voltage = (ozone_value/4095.0f)*5.0f; // converting the ADC value to voltage using micro-controller ADC 12 bit values (0-4095) and 5V supply for sensor
 
-	  float ppb = Voltage_to_PPB(voltage);
+	  float ppb = voltage_to_PPB(voltage);
 
 	  float ppm = ppb/1000.0f;
 
-	  HAL_Delay(1000); //delays the readings ********* might have to change this
+	  HAL_Delay(1000); // delays the readings by a second
   }
 }
-
-uint32_t Read_ADC(void){
-	HAL_ADC_Start(&hadc1); //ADC conversion begins
-	if (HAL_ADC_PollForConversion(&hadc1, 100) == HAL_OK) {
-	        return HAL_ADC_GetValue(&hadc1); //reading ADC value
-	    }
-	    return 0;  // If something went wrong
-	}
-
-float Voltage_to_PPB(float voltage){ //Fake values for now the graph is going to kill me :(
-	if (voltage >= 4.0 || voltage<1.7) {
-	        return 0.0f;
-	    }
-	else if (voltage <4.0 && voltage >= 3.5) { //b/t 4 and 3.5 volts
-	        return (4.5f - voltage) * 75.0f;
-	    }
-	else if (voltage < 3.5 && voltage >= 3.0) { //b/t 3.5 and 3 volts
-	        return (4.0f - voltage) * 100.0f;
-	    }
-	else if (voltage < 3.0 && voltage >=2.5) { //b/t 3.0 and 2.5 volts
-		        return (3.5f - voltage) * 200.0f;
-		    }
-	else if (voltage < 2.5 && voltage >=2.0) { //b/t 2.5 and 2.0 volts
-			        return (3.0f - voltage) * 400.0f;
-			    }
-	else if (voltage < 2.0 && voltage >=1.7) { //b/t 2.0 and 1.7 volts
-			        return (2.7f - voltage) * 1000.0f;
-			    }
-}
-
 
 void SystemClock_Config(void)
 {
@@ -171,22 +139,6 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin : B1_Pin */
-  GPIO_InitStruct.Pin = B1_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : LD2_Pin */
-  GPIO_InitStruct.Pin = LD2_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(LD2_GPIO_Port, &GPIO_InitStruct);
-
 }
 
 void Error_Handler(void)
@@ -196,20 +148,3 @@ void Error_Handler(void)
   {
   }
 }
-
-#ifdef  USE_FULL_ASSERT
-/**
-  * @brief  Reports the name of the source file and the source line number
-  *         where the assert_param error has occurred.
-  * @param  file: pointer to the source file name
-  * @param  line: assert_param error line source number
-  * @retval None
-  */
-void assert_failed(uint8_t *file, uint32_t line)
-{
-  /* USER CODE BEGIN 6 */
-  /* User can add his own implementation to report the file name and line number,
-     ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
-  /* USER CODE END 6 */
-}
-#endif /* USE_FULL_ASSERT */

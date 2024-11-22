@@ -1,5 +1,17 @@
 #include "display.h"
 
+display_status display_PM25(sensor_data const *data) {
+    return DISPLAY_FAIL;
+}
+
+display_status display_O3(sensor_data const *data) {
+    return DISPLAY_FAIL;
+}
+
+display_status display_NO2(sensor_data const *data) {
+    return DISPLAY_FAIL;
+}
+
 // Display gas concentration; try three times
 display_status display_concentration(display_state const state) {
     uint8_t tries = 3;

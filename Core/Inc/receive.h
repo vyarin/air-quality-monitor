@@ -9,5 +9,6 @@ typedef enum {
 receive_status;
 
 receive_status receive(sensor_data *data);
+receive_status check( uint8_t *buffer );
 
 #endif

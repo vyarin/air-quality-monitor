@@ -1,14 +1,17 @@
 #include "display.h"
 
 display_status display_PM25(sensor_data const *data) {
+    uint16_t concentration = get_concentration(data, 0);
     return DISPLAY_FAIL;
 }
 
 display_status display_O3(sensor_data const *data) {
+    uint16_t concentration = get_concentration(data, 1);
     return DISPLAY_FAIL;
 }
 
 display_status display_NO2(sensor_data const *data) {
+    uint16_t concentration = get_concentration(data, 2);
     return DISPLAY_FAIL;
 }
 

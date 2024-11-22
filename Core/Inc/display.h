@@ -21,4 +21,6 @@ display_status display_NO2(sensor_data const *data);
 
 display_status display_concentration(display_state const state);
 
+void cycle_status(display_state *state);
+
 #endif

@@ -6,6 +6,8 @@
 */
 #include "main.h"
 #include "stm32f4xx_hal.h"
+#include "MQ131.h"
+
 
 ADC_HandleTypeDef hadc1;
 UART_HandleTypeDef huart2;

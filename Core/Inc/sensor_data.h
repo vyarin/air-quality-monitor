@@ -12,4 +12,6 @@ typedef struct sensor_data {
 }
 sensor_data;
 
+uint16_t get_concentration(sensor_data const *data, uint8_t particle);
+
 #endif

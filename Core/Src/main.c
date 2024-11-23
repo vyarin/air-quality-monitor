@@ -109,7 +109,10 @@ int main(void)
 
     // Update LCD information
     if (display_timer % 10 == 0) {
-      ;
+        // Switch display only when it does not fail
+        if (display_concentration(status) != DISPLAY_FAIL) {
+            cycle_status(status);
+        }
     }
 
     // Invoke LED functions every 30 seconds

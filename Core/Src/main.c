@@ -19,6 +19,9 @@
 #include "stm32f4xx_hal.h"
 #include "SEN0574.h"
 
+ADC_HandleTypeDef hadc1;    
+UART_HandleTypeDef huart2;
+
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_USART2_UART_Init(void);
@@ -42,10 +45,20 @@ int main(void)
   MX_USART2_UART_Init();
   MX_ADC1_Init();
 
+ uint16_t NO2_value;
+ 
   /* Infinite loop */
   while (1)
   {
+     NO2_value = read_ADC(); // get NO2 concentration from sensor
 
+	    float voltage = (NO2_value/4095.0f)*5.0f; // converting the ADC value to voltage using micro-controller ADC 12 bit values (0-4095) and 5V supply for sensor
+
+	    float ppm = voltage_to_ppm(voltage);
+
+     float ppb = ppm_to_ppb(ppm);
+
+	    HAL_Delay(1000); // delays the readings by a second
   }
 }
 

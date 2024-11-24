@@ -16,7 +16,7 @@ display_status display_NO2(sensor_data const *data) {
 }
 
 // Display gas concentration; try three times
-display_status display_concentration(display_state const state) {
+display_status display_concentration(display_state const state, sensor_data const *data) {
     uint8_t tries = 3;
 
     while (tries > 0) {    

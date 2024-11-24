@@ -19,7 +19,7 @@ display_status display_PM25(sensor_data const *data);
 display_status display_O3(sensor_data const *data);
 display_status display_NO2(sensor_data const *data);
 
-display_status display_concentration(display_state const state);
+display_status display_concentration(display_state const state, sensor_data const *data);
 
 void cycle_status(display_state *state);
 

@@ -39,7 +39,7 @@ int main(void)
 
 	  float voltage = (ozone_value/4095.0f)*5.0f; // converting the ADC value to voltage using micro-controller ADC 12 bit values (0-4095) and 5V supply for sensor
 
-	  float ppb = voltage_to_ppb(voltage);
+	  int ppb = (int)voltage_to_ppb(voltage);
 
 	  HAL_Delay(1000); // delays the readings by a second
   }

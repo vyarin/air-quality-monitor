@@ -41,8 +41,6 @@ int main(void)
 
 	  float ppb = voltage_to_PPB(voltage);
 
-	  float ppm = ppb/1000.0f;
-
 	  HAL_Delay(1000); // delays the readings by a second
   }
 }

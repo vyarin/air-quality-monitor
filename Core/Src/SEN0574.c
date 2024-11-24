@@ -44,7 +44,3 @@ float voltage_to_ppm(float voltage){
 		return (voltage - 3.7) * 10.0f
 	}
 }
-
-float ppm_to_ppb(float ppm){
-	return ppm*1000f;
-}

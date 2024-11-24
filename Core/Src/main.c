@@ -127,15 +127,19 @@ int main(void)
     // Update LCD information
     if (display_timer % 10 == 0) {
         // Switch display only when it does not fail
-        if (display_concentration(status) != DISPLAY_FAIL) {
+        if (display_concentration(status, &current_concentration) != DISPLAY_FAIL) {
             cycle_status(status);
         }
     }
 
     // Invoke LED functions every 30 seconds
-	  if (display_timer > 30) {
-		  display_timer = 0;
-	  }
+	if (display_timer > 30) {
+        // This uses integer division: address later.
+        avg_concentration.PM25 / 30;
+        avg_concentration.O3 / 30;
+        avg_concentration.NO2 / 30;
+	    display_timer = 0;
+	}
 
     /* USER CODE BEGIN 3 */
   }

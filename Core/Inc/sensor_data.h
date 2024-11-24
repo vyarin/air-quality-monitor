@@ -12,6 +12,13 @@ typedef struct sensor_data {
 }
 sensor_data;
 
-uint16_t get_concentration(sensor_data const *data, uint8_t particle);
+typedef struct gas_concentrations {
+	uint16_t PM25;
+	uint16_t O3;
+	uint16_t NO2;
+}
+gas_concentrations;
+
+uint16_t get_concentration(sensor_data const *raw_data, gas_concentrations *data);
 
 #endif

@@ -67,8 +67,15 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
+  display_state status;
   uint16_t interval = 0;
   uint8_t display_timer = 0;
+  sensor_data data;
+  
+  gas_concentrations concentrations;
+  concentrations.PM25 = 0;
+  concentrations.O3 = 0;
+  concentrations.NO2 = 0;
 
   /* USER CODE END 1 */
 
@@ -100,12 +107,21 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-	  interval = HAL_GetTick() % 1000;
+    gas_concentrations current_concentration;
 
-	  // Track seconds elapsed
-	  if (interval == 0) {
-		  ++display_timer;
-	  }
+	interval = HAL_GetTick() % 1000;
+
+	// Track seconds elapsed
+	if (interval == 0) {
+        receive(&data);
+
+        get_concentration(&data, &current_concentration);
+        concentrations.PM25 += current_concentration.PM25;
+        concentrations.O3 += current_concentration.O3;
+        concentrations.NO2 += current_concentration.NO2;
+        
+	    ++display_timer;
+	}
 
     // Update LCD information
     if (display_timer % 10 == 0) {

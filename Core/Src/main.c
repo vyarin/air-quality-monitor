@@ -72,10 +72,11 @@ int main(void)
   uint8_t display_timer = 0;
   sensor_data data;
   
-  gas_concentrations concentrations;
-  concentrations.PM25 = 0;
-  concentrations.O3 = 0;
-  concentrations.NO2 = 0;
+  gas_concentrations avg_concentration;
+  avg_concentration.PM25 = 0;
+  avg_concentration.O3 = 0;
+  avg_concentration.NO2 = 0;
+
 
   /* USER CODE END 1 */
 
@@ -116,9 +117,9 @@ int main(void)
         receive(&data);
 
         get_concentration(&data, &current_concentration);
-        concentrations.PM25 += current_concentration.PM25;
-        concentrations.O3 += current_concentration.O3;
-        concentrations.NO2 += current_concentration.NO2;
+        avg_concentration.PM25 += current_concentration.PM25;
+        avg_concentration.O3 += current_concentration.O3;
+        avg_concentration.NO2 += current_concentration.NO2;
         
 	    ++display_timer;
 	}

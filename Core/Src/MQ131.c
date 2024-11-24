@@ -8,7 +8,7 @@ uint16_t read_ADC(void){
 	    return 0;  // If something went wrong
 	}
 
-float voltage_to_PPB(float voltage){
+float voltage_to_ppb(float voltage){
 	if (voltage >= 4.0 || voltage < 1.7) {
 	        return 0.0f;
 	    }

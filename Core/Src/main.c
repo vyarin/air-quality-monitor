@@ -54,7 +54,7 @@ int main(void)
 
 	    float voltage = (NO2_value/4095.0f)*5.0f; // converting the ADC value to voltage using micro-controller ADC 12 bit values (0-4095) and 5V supply for sensor
 
-	    float ppm = voltage_to_ppm(voltage);
+	    int ppm = (int)voltage_to_ppm(voltage);
 
 	    HAL_Delay(1000); // delays the readings by a second
   }

@@ -5,12 +5,12 @@
   ******************************************************************************
 */
 #include "main.h"
-#include "stm32f4xx_hal.h"
 #include "MQ131.h"
-
+#include "stm32f4xx_hal.h"
 
 ADC_HandleTypeDef hadc1;
 UART_HandleTypeDef huart2;
+
 
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
@@ -31,17 +31,17 @@ int main(void)
 
   uint16_t ozone_value;
 
-
   /* Infinite loop */
   while (1)
   {
-	  ozone_value = read_ADC(); // get ozone concentration from sensor
+	  ozone_value = read_ADC(hadc1); //get ozone concentration from sensor
 
-	  float voltage = (ozone_value/4095.0f)*5.0f; // converting the ADC value to voltage using micro-controller ADC 12 bit values (0-4095) and 5V supply for sensor
+	  float voltage = (ozone_value/4095.0f)*5.0f; //Converting the ADC value to voltage using micro-controller ADC 12 bit values (0-4095) and 5V supply for sensor
 
-	  int ppb = (int)voltage_to_ppb(voltage);
+	  int ppb = (int) voltage_to_ppb(voltage);
   }
 }
+
 
 void SystemClock_Config(void)
 {
@@ -137,6 +137,22 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin : B1_Pin */
+  GPIO_InitStruct.Pin = B1_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : LD2_Pin */
+  GPIO_InitStruct.Pin = LD2_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(LD2_GPIO_Port, &GPIO_InitStruct);
+
 }
 
 void Error_Handler(void)
@@ -146,3 +162,20 @@ void Error_Handler(void)
   {
   }
 }
+
+#ifdef  USE_FULL_ASSERT
+/**
+  * @brief  Reports the name of the source file and the source line number
+  *         where the assert_param error has occurred.
+  * @param  file: pointer to the source file name
+  * @param  line: assert_param error line source number
+  * @retval None
+  */
+void assert_failed(uint8_t *file, uint32_t line)
+{
+  /* USER CODE BEGIN 6 */
+  /* User can add his own implementation to report the file name and line number,
+     ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
+  /* USER CODE END 6 */
+}
+#endif /* USE_FULL_ASSERT */

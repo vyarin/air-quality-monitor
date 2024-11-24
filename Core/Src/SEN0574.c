@@ -6,7 +6,7 @@ uint16_t read_ADC(void){
 	    }
 	    return 0;  // If something went wrong
 	}
-float voltage_to_PPM(float voltage){
+float voltage_to_ppm(float voltage){
 	if (voltage < 1.0 || voltage >= 4.7) {
 	        return 0.0f;
 	    }
@@ -43,3 +43,8 @@ float voltage_to_PPM(float voltage){
 	else if (voltage > 4.5 && voltage < 4.7){ // b/t 4.5 and 4.7 volts
 		return (voltage - 3.7) * 10.0f
 	}
+}
+
+float ppm_to_ppb(float ppm){
+	return ppm*1000f;
+}

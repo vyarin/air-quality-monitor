@@ -19,6 +19,6 @@ typedef struct gas_concentrations {
 }
 gas_concentrations;
 
-void get_concentration(sensor_data const *raw_data, gas_concentrations *data);
+void get_concentration(sensor_data *raw_data, gas_concentrations *data);
 
 #endif

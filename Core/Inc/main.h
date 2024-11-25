@@ -58,30 +58,10 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define USART_TX_Pin GPIO_PIN_2
-#define USART_TX_GPIO_Port GPIOA
-
-#define LED1_PIN GPIO_PIN_0 // PA0
-#define LED2_PIN GPIO_PIN_1 // PA1
-#define LED3_PIN GPIO_PIN_0 // PC0
-#define LED4_PIN GPIO_PIN_4 // PA4
-#define LED5_PIN GPIO_PIN_1 // PC1
-#define LED6_PIN GPIO_PIN_0 // PB0
-#define LED7_PIN GPIO_PIN_5 // PB5
-#define LED8_PIN GPIO_PIN_3 // PB3
-
-// Define GPIO ports for LEDs
-#define LED1_PORT GPIOA
-#define LED2_PORT GPIOA
-#define LED3_PORT GPIOC
-#define LED4_PORT GPIOA
-#define LED5_PORT GPIOC
-#define LED6_PORT GPIOB
-#define LED7_PORT GPIOB
-#define LED8_PORT GPIOB
-
 #define B1_Pin GPIO_PIN_13
 #define B1_GPIO_Port GPIOC
+#define USART_TX_Pin GPIO_PIN_2
+#define USART_TX_GPIO_Port GPIOA
 #define USART_RX_Pin GPIO_PIN_3
 #define USART_RX_GPIO_Port GPIOA
 #define LD2_Pin GPIO_PIN_5

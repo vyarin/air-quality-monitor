@@ -14,8 +14,8 @@ void control_LEDs(float index){
 
 //Turning on/off LEDs based on num from above
   if(turn_on >= 2){ // Blue LEDs
-    HAL_GPIO_WritePin(GPIOA, LED1_PIN, GPIO_PIN_SET);
-    HAL_GPIO_WritePin(GPIOA, LED2_PIN, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(GPIOB, LED1_PIN, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(GPIOB, LED2_PIN, GPIO_PIN_SET);
   }
 
   if(turn_on >= 4){ // Green LEDs

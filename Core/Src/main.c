@@ -114,7 +114,9 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	gas_concentrations current_concentration;
+	 current_concentration.PM25 = 0;
+	 current_concentration.O3 = 0;
+	 current_concentration.NO2 = 0;
 
 	interval = HAL_GetTick() % 1000;
 

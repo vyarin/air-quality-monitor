@@ -101,7 +101,16 @@ int main(void)
   {
     /* USER CODE END WHILE */
 
+    /* USER CODE BEGIN 3 */
+
 	  sensor_data data;
+	  data.PM25_high = 0;
+	  data.PM25_low = 0;
+	  data.O3_high = 0;
+	  data.O3_low = 0;
+	  data.NO2_high = 0;
+	  data.NO2_low = 0;
+
 	  uint16_t PM25 = 0;
 	  if (read_PM25_data(&PM25) == PMS5003_FAIL) {
 		  continue;

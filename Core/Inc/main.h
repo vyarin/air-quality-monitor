@@ -61,18 +61,18 @@ void Error_Handler(void);
 #define USART_TX_Pin GPIO_PIN_2
 #define USART_TX_GPIO_Port GPIOA
 
-#define LED1_PIN GPIO_PIN_0 // PA0
-#define LED2_PIN GPIO_PIN_1 // PA1
+#define LED1_PIN GPIO_PIN_4 // PB4
+#define LED2_PIN GPIO_PIN_10 // PB10
 #define LED3_PIN GPIO_PIN_0 // PC0
-#define LED4_PIN GPIO_PIN_4 // PA4
+#define LED4_PIN GPIO_PIN_8 // PA8
 #define LED5_PIN GPIO_PIN_1 // PC1
 #define LED6_PIN GPIO_PIN_0 // PB0
 #define LED7_PIN GPIO_PIN_5 // PB5
 #define LED8_PIN GPIO_PIN_3 // PB3
 
 // Define GPIO ports for LEDs
-#define LED1_PORT GPIOA
-#define LED2_PORT GPIOA
+#define LED1_PORT GPIOB
+#define LED2_PORT GPIOB
 #define LED3_PORT GPIOC
 #define LED4_PORT GPIOA
 #define LED5_PORT GPIOC

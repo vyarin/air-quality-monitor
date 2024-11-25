@@ -3,8 +3,8 @@
 
 display_status display_PM25(gas_concentrations *data) {
     uint16_t concentration = data->PM25;
-    char buffer[13];
-    sprintf((&buffer), "PM2.5: %d", concentration);
+    char buffer[17];
+    sprintf((&buffer), "PM2.5: %d ppb", concentration);
 	clearLCD();
 	writeLCD(&buffer);
     return DISPLAY_OK;
@@ -12,8 +12,8 @@ display_status display_PM25(gas_concentrations *data) {
 
 display_status display_O3(gas_concentrations *data) {
     uint16_t concentration = data->O3;
-    char buffer[10];
-    sprintf((&buffer), "O3: %d", concentration);
+    char buffer[14];
+    sprintf((&buffer), "O3: %d ppb", concentration);
 	clearLCD();
 	writeLCD(&buffer);
     return DISPLAY_OK;
@@ -21,8 +21,8 @@ display_status display_O3(gas_concentrations *data) {
 
 display_status display_NO2(gas_concentrations *data) {
     uint16_t concentration = data->NO2;
-	char buffer[11];
-    sprintf((&buffer), "NO2: %d", concentration);
+	char buffer[15];
+    sprintf((&buffer), "NO2: %d ppb", concentration);
 	clearLCD();
 	writeLCD(&buffer);
     return DISPLAY_OK;

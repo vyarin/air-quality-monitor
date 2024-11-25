@@ -71,7 +71,7 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-  display_state status;
+  display_state status = 0;
   uint16_t interval = 0;
   uint8_t display_timer = 0;
   sensor_data data;

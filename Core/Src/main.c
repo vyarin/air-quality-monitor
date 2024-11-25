@@ -81,6 +81,8 @@ int main(void)
   avg_concentration.O3 = 0;
   avg_concentration.NO2 = 0;
 
+  gas_concentrations current_concentration;
+
 
   /* USER CODE END 1 */
 

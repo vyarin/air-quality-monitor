@@ -1,4 +1,3 @@
-/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file           : main.c
@@ -17,116 +16,62 @@
   */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
-#include "main.h"
 #include "AQI_Calculator.h"
-/* Private includes ----------------------------------------------------------*/
-/* USER CODE BEGIN Includes */
+#include "main.h"
+#include "stm32f4xx_hal.h"
+#include "MQ131.h"
+#include "SEN0574.h"
 
-/* USER CODE END Includes */
 
-/* Private typedef -----------------------------------------------------------*/
-/* USER CODE BEGIN PTD */
-
-/* USER CODE END PTD */
-
-/* Private define ------------------------------------------------------------*/
-/* USER CODE BEGIN PD */
-
-/* USER CODE END PD */
-
-/* Private macro -------------------------------------------------------------*/
-/* USER CODE BEGIN PM */
-
-/* USER CODE END PM */
-
-/* Private variables ---------------------------------------------------------*/
+ADC_HandleTypeDef hadc1;
 UART_HandleTypeDef huart2;
 
-/* USER CODE BEGIN PV */
-
-/* USER CODE END PV */
-
-/* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_USART2_UART_Init(void);
-/* USER CODE BEGIN PFP */
+static void MX_ADC1_Init(void);
 
-/* USER CODE END PFP */
-
-/* Private user code ---------------------------------------------------------*/
-/* USER CODE BEGIN 0 */
-
-/* USER CODE END 0 */
 
 /**
   * @brief  The application entry point.
   * @retval int
   */
+
+/* Reset of all peripherals, Initializes the Flash interface and the Systick. */
 int main(void)
 {
-
-  /* USER CODE BEGIN 1 */
-  uint16_t interval = 0;
-  uint8_t display_timer = 0;
-
-  /* USER CODE END 1 */
-
-  /* MCU Configuration--------------------------------------------------------*/
-
-  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
-
-  /* USER CODE BEGIN Init */
-
-  /* USER CODE END Init */
 
   /* Configure the system clock */
   SystemClock_Config();
 
-  /* USER CODE BEGIN SysInit */
-
-  /* USER CODE END SysInit */
-
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_USART2_UART_Init();
-  /* USER CODE BEGIN 2 */
+  MX_ADC1_Init();
 
-  /* USER CODE END 2 */
-
+ uint16_t NO2_value;
+ uint16_t ozone_value;
+ 
   /* Infinite loop */
-  /* USER CODE BEGIN WHILE */
   while (1)
   {
-    /* USER CODE END WHILE */
-	 uint8_t a = get_AQHI(avg_concentration.PM25, avg_concentration.O3, avg_concentration.NO2);
-	  interval = HAL_GetTick() % 1000;
+    NO2_value = read_ADC(hadc1); // get NO2 concentration from sensor
 
-	  // Track seconds elapsed
-	  if (interval == 0) {
-		  ++display_timer;
-	  }
+	  float voltage = (NO2_value/4095.0f)*5.0f; // converting the ADC value to voltage using micro-controller ADC 12 bit values (0-4095) and 5V supply for sensor
 
-    // Update LCD information
-    if (display_timer % 10 == 0) {
-      ;
-    }
+	  int ppm = (int)voltage_to_ppm(voltage);
+	  ozone_value = read_ADC(hadc1); //get ozone concentration from sensor
 
-    // Invoke LED functions every 30 seconds
-	  if (display_timer > 30) {
-		  display_timer = 0;
-	  }
+	  float voltage = (ozone_value/4095.0f)*5.0f; //Converting the ADC value to voltage using micro-controller ADC 12 bit values (0-4095) and 5V supply for sensor
 
-    /* USER CODE BEGIN 3 */
+	  int ppb = (int) voltage_to_ppb(voltage);
+    
+    uint8_t a = get_AQHI(avg_concentration.PM25, avg_concentration.O3, avg_concentration.NO2);
   }
-  /* USER CODE END 3 */
 }
 
-/**
-  * @brief System Clock Configuration
-  * @retval None
-  */
+
 void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
@@ -170,6 +115,60 @@ void SystemClock_Config(void)
 }
 
 /**
+  * @brief ADC1 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_ADC1_Init(void)
+{
+
+  /* USER CODE BEGIN ADC1_Init 0 */
+
+  /* USER CODE END ADC1_Init 0 */
+
+  ADC_ChannelConfTypeDef sConfig = {0};
+
+  /* USER CODE BEGIN ADC1_Init 1 */
+
+  /* USER CODE END ADC1_Init 1 */
+
+  /** Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion)
+  */
+  hadc1.Instance = ADC1;
+  hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV4;
+  hadc1.Init.Resolution = ADC_RESOLUTION_12B;
+  hadc1.Init.ScanConvMode = DISABLE;
+  hadc1.Init.ContinuousConvMode = DISABLE;
+  hadc1.Init.DiscontinuousConvMode = DISABLE;
+  hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
+  hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
+  hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
+  hadc1.Init.NbrOfConversion = 1;
+  hadc1.Init.DMAContinuousRequests = DISABLE;
+  hadc1.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
+  if (HAL_ADC_Init(&hadc1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
+  */
+  sConfig.Channel = ADC_CHANNEL_0;
+  sConfig.Channel = ADC_CHANNEL_1;
+  sConfig.Rank = 1;
+  sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN ADC1_Init 2 */
+
+  /* USER CODE END ADC1_Init 2 */
+
+}
+
+/**
+
   * @brief USART2 Initialization Function
   * @param None
   * @retval None
@@ -184,6 +183,11 @@ static void MX_USART2_UART_Init(void)
   /* USER CODE BEGIN USART2_Init 1 */
 
   /* USER CODE END USART2_Init 1 */
+}
+
+static void MX_USART2_UART_Init(void)
+{
+
   huart2.Instance = USART2;
   huart2.Init.BaudRate = 115200;
   huart2.Init.WordLength = UART_WORDLENGTH_8B;
@@ -207,13 +211,10 @@ static void MX_USART2_UART_Init(void)
   * @param None
   * @retval None
   */
+
 static void MX_GPIO_Init(void)
 {
   GPIO_InitTypeDef GPIO_InitStruct = {0};
-/* USER CODE BEGIN MX_GPIO_Init_1 */
-/* USER CODE END MX_GPIO_Init_1 */
-
-  /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOH_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
@@ -234,23 +235,10 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(LD2_GPIO_Port, &GPIO_InitStruct);
-
-/* USER CODE BEGIN MX_GPIO_Init_2 */
-/* USER CODE END MX_GPIO_Init_2 */
 }
 
-/* USER CODE BEGIN 4 */
-
-/* USER CODE END 4 */
-
-/**
-  * @brief  This function is executed in case of error occurrence.
-  * @retval None
-  */
 void Error_Handler(void)
 {
-  /* USER CODE BEGIN Error_Handler_Debug */
-  /* User can add his own implementation to report the HAL error return state */
   __disable_irq();
   while (1)
   {

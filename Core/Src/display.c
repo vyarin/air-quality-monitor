@@ -29,38 +29,29 @@ display_status display_NO2(gas_concentrations *data) {
 }
 
 // Display gas concentration; try three times
-display_status display_concentration(display_state const state, gas_concentrations const *data) {
+display_status display_concentration(display_state state, gas_concentrations *data) {
     uint8_t tries = 3;
 
-    while (tries > 0) {    
-        switch (state) {
-        case 0:
-            if (display_PM25(&data) == DISPLAY_FAIL) {
-                --tries;
-            } else {
-                return DISPLAY_OK;
-            }
-            break;
-        case 1:
-            if (display_O3(&data) == DISPLAY_FAIL) {
-                --tries;
-            } else {
-                return DISPLAY_OK;
-            }
-            break;
-
-        case 2:
-            if (display_NO2(&data) == DISPLAY_FAIL) {
-                --tries;
-            } else {
-                return DISPLAY_OK;
-            }
-            break;
-
-        default:
-            --tries;
-            break;
-        }
+    while (tries > 0) {
+    	if (state == 0) {
+    		if (display_PM25(data) != DISPLAY_OK) {
+				--tries;
+			} else {
+				return DISPLAY_OK;
+			}
+    	} else if (state == 1) {
+    		 if (display_O3(data) != DISPLAY_OK) {
+				--tries;
+			} else {
+				return DISPLAY_OK;
+			}
+    	} else {
+    		if (display_NO2(data) != DISPLAY_OK) {
+				--tries;
+			} else {
+				return DISPLAY_OK;
+			}
+    	}
     }
 
     return DISPLAY_FAIL;

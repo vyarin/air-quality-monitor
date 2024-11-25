@@ -1,18 +1,31 @@
 #include "display.h"
+#include "lcd.h"
 
-display_status display_PM25(gas_concentrations const *data) {
+display_status display_PM25(gas_concentrations *data) {
     uint16_t concentration = data->PM25;
-    return DISPLAY_FAIL;
+    char buffer[13];
+    sprintf((&buffer), "PM2.5: %d", concentration);
+	clearLCD();
+	writeLCD(&buffer);
+    return DISPLAY_OK;
 }
 
-display_status display_O3(gas_concentrations const *data) {
+display_status display_O3(gas_concentrations *data) {
     uint16_t concentration = data->O3;
-    return DISPLAY_FAIL;
+    char buffer[10];
+    sprintf((&buffer), "O3: %d", concentration);
+	clearLCD();
+	writeLCD(&buffer);
+    return DISPLAY_OK;
 }
 
-display_status display_NO2(gas_concentrations const *data) {
+display_status display_NO2(gas_concentrations *data) {
     uint16_t concentration = data->NO2;
-    return DISPLAY_FAIL;
+	char buffer[11];
+    sprintf((&buffer), "NO2: %d", concentration);
+	clearLCD();
+	writeLCD(&buffer);
+    return DISPLAY_OK;
 }
 
 // Display gas concentration; try three times

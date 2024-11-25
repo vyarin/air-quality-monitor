@@ -82,7 +82,6 @@ int main(void)
 
   gas_concentrations current_concentration;
 
-
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -114,6 +113,22 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
+	  interval = HAL_GetTick() % 1000;
+
+	  // Track seconds elapsed
+	  if (interval == 0) {
+		  ++display_timer;
+	  }
+
+    // Update LCD information
+    if (display_timer % 10 == 0) {
+      ;
+    }
+
+    // Invoke LED functions every 30 seconds
+	  if (display_timer > 30) {
+		  display_timer = 0;
+	  }
 
     /* USER CODE BEGIN 3 */
 	 current_concentration.PM25 = 0;

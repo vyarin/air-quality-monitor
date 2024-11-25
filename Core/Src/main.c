@@ -17,7 +17,9 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "stm32f4xx_hal.h"
+#include "MQ131.h"
 #include "SEN0574.h"
+
 
 ADC_HandleTypeDef hadc1;
 UART_HandleTypeDef huart2;
@@ -31,10 +33,9 @@ static void MX_ADC1_Init(void);
   * @brief  The application entry point.
   * @retval int
   */
+/* Reset of all peripherals, Initializes the Flash interface and the Systick. */
 int main(void)
 {
-
-  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
 
   /* Configure the system clock */
@@ -46,22 +47,25 @@ int main(void)
   MX_ADC1_Init();
 
  uint16_t NO2_value;
-
+ uint16_t ozone_value;
+ 
   /* Infinite loop */
   while (1)
   {
-     NO2_value = read_ADC(hadc1); // get NO2 concentration from sensor
+    NO2_value = read_ADC(hadc1); // get NO2 concentration from sensor
 
-	    float voltage = (NO2_value/4095.0f)*5.0f; // converting the ADC value to voltage using micro-controller ADC 12 bit values (0-4095) and 5V supply for sensor
+	  float voltage = (NO2_value/4095.0f)*5.0f; // converting the ADC value to voltage using micro-controller ADC 12 bit values (0-4095) and 5V supply for sensor
 
-	    int ppm = (int)voltage_to_ppm(voltage);
+	  int ppm = (int)voltage_to_ppm(voltage);
+	  ozone_value = read_ADC(hadc1); //get ozone concentration from sensor
+
+	  float voltage = (ozone_value/4095.0f)*5.0f; //Converting the ADC value to voltage using micro-controller ADC 12 bit values (0-4095) and 5V supply for sensor
+
+	  int ppb = (int) voltage_to_ppb(voltage);
   }
 }
 
-/**
-  * @brief System Clock Configuration
-  * @retval None
-  */
+
 void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
@@ -144,6 +148,7 @@ static void MX_ADC1_Init(void)
   /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
   */
   sConfig.Channel = ADC_CHANNEL_0;
+  sConfig.Channel = ADC_CHANNEL_1;
   sConfig.Rank = 1;
   sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES;
   if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
@@ -171,6 +176,10 @@ static void MX_USART2_UART_Init(void)
   /* USER CODE BEGIN USART2_Init 1 */
 
   /* USER CODE END USART2_Init 1 */
+}
+
+static void MX_USART2_UART_Init(void)
+{
   huart2.Instance = USART2;
   huart2.Init.BaudRate = 115200;
   huart2.Init.WordLength = UART_WORDLENGTH_8B;
@@ -200,6 +209,11 @@ static void MX_GPIO_Init(void)
 /* USER CODE END MX_GPIO_Init_1 */
 
   /* GPIO Ports Clock Enable */
+}
+
+static void MX_GPIO_Init(void)
+{
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
   __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOH_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
@@ -221,6 +235,26 @@ void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
   /* User can add his own implementation to report the HAL error return state */
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin : B1_Pin */
+  GPIO_InitStruct.Pin = B1_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : LD2_Pin */
+  GPIO_InitStruct.Pin = LD2_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(LD2_GPIO_Port, &GPIO_InitStruct);
+
+}
+
+void Error_Handler(void)
+{
   __disable_irq();
   while (1)
   {

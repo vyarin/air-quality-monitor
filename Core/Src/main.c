@@ -130,8 +130,6 @@ int main(void)
 			  break;
 		  }
 	  }
-
-    /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
 }

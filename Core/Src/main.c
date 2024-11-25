@@ -19,7 +19,7 @@
 #include "stm32f4xx_hal.h"
 #include "SEN0574.h"
 
-ADC_HandleTypeDef hadc1;    
+ADC_HandleTypeDef hadc1;
 UART_HandleTypeDef huart2;
 
 void SystemClock_Config(void);
@@ -46,11 +46,11 @@ int main(void)
   MX_ADC1_Init();
 
  uint16_t NO2_value;
- 
+
   /* Infinite loop */
   while (1)
   {
-     NO2_value = read_ADC(); // get NO2 concentration from sensor
+     NO2_value = read_ADC(hadc1); // get NO2 concentration from sensor
 
 	    float voltage = (NO2_value/4095.0f)*5.0f; // converting the ADC value to voltage using micro-controller ADC 12 bit values (0-4095) and 5V supply for sensor
 

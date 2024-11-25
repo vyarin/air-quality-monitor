@@ -59,9 +59,9 @@ display_status display_concentration(display_state state, gas_concentrations *da
 
 void cycle_status(display_state *state) {
     if (*state != 2) {
-        state += 1;
+        *state += 1;
     } else {
-        state = 0;
+        *state = 0;
     }
 
     return;

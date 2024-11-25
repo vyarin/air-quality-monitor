@@ -3,11 +3,11 @@ void control_LEDs(float index){
   int turn_on = 0;
 
 //Determining how many LEDs to turn on based on AQI
-  if(index <= 1)         // Good air quality
+  if(index <= 3)         // Good air quality
     turn_on = 2;
-  else if (index <=  2) // Moderate air quality
+  else if (index <=  6) // Moderate air quality
     turn_on = 4;
-  else if (index <= 3) // Bad air quality
+  else if (index <= 9) // Bad air quality
     turn_on = 6;
   else                // Very bad air quality
     turn_on = 8;

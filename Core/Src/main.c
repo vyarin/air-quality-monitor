@@ -14,7 +14,9 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
+#include "AQI_Calculator.h"
 #include "main.h"
 #include "stm32f4xx_hal.h"
 #include "MQ131.h"
@@ -29,10 +31,12 @@ static void MX_GPIO_Init(void);
 static void MX_USART2_UART_Init(void);
 static void MX_ADC1_Init(void);
 
+
 /**
   * @brief  The application entry point.
   * @retval int
   */
+
 /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
 int main(void)
 {
@@ -62,6 +66,8 @@ int main(void)
 	  float voltage = (ozone_value/4095.0f)*5.0f; //Converting the ADC value to voltage using micro-controller ADC 12 bit values (0-4095) and 5V supply for sensor
 
 	  int ppb = (int) voltage_to_ppb(voltage);
+    
+    uint8_t a = get_AQHI(avg_concentration.PM25, avg_concentration.O3, avg_concentration.NO2);
   }
 }
 
@@ -162,6 +168,7 @@ static void MX_ADC1_Init(void)
 }
 
 /**
+
   * @brief USART2 Initialization Function
   * @param None
   * @retval None
@@ -180,6 +187,7 @@ static void MX_USART2_UART_Init(void)
 
 static void MX_USART2_UART_Init(void)
 {
+
   huart2.Instance = USART2;
   huart2.Init.BaudRate = 115200;
   huart2.Init.WordLength = UART_WORDLENGTH_8B;
@@ -203,13 +211,6 @@ static void MX_USART2_UART_Init(void)
   * @param None
   * @retval None
   */
-static void MX_GPIO_Init(void)
-{
-/* USER CODE BEGIN MX_GPIO_Init_1 */
-/* USER CODE END MX_GPIO_Init_1 */
-
-  /* GPIO Ports Clock Enable */
-}
 
 static void MX_GPIO_Init(void)
 {
@@ -219,22 +220,6 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
-/* USER CODE BEGIN MX_GPIO_Init_2 */
-/* USER CODE END MX_GPIO_Init_2 */
-}
-
-/* USER CODE BEGIN 4 */
-
-/* USER CODE END 4 */
-
-/**
-  * @brief  This function is executed in case of error occurrence.
-  * @retval None
-  */
-void Error_Handler(void)
-{
-  /* USER CODE BEGIN Error_Handler_Debug */
-  /* User can add his own implementation to report the HAL error return state */
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
 
@@ -250,7 +235,6 @@ void Error_Handler(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(LD2_GPIO_Port, &GPIO_InitStruct);
-
 }
 
 void Error_Handler(void)

@@ -1,5 +1,6 @@
 #ifndef MQ131_H
 #define MQ131_H
-uint16_t read_ADC(void);
+#include "main.h"
+uint16_t read_ADC(ADC_HandleTypeDef hadc1);
 float voltage_to_ppm(float voltage);
 #endif

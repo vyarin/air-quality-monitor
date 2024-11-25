@@ -12,4 +12,13 @@ typedef struct sensor_data {
 }
 sensor_data;
 
+typedef struct gas_concentrations {
+	uint16_t PM25;
+	uint16_t O3;
+	uint16_t NO2;
+}
+gas_concentrations;
+
+void get_concentration(sensor_data *raw_data, gas_concentrations *data);
+
 #endif
